@@ -1,0 +1,577 @@
+;;; Inicio del archivo .emacs
+
+;; Preámbulo y Configuración de Package.el
+;; ---------------------------------------
+;; Asegúrate de que esta sección se mantenga al principio para gestionar correctamente los paquetes.
+(require 'package)
+(setq use-package-always-defer t)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(package-initialize)
+(package-install 'use-package)
+
+;; Configuraciones Básicas
+;; -----------------------
+(setq default-directory "~/")
+(setq command-line-default-directory "~/")
+;;(set-frame-font "ProggyVector 11" nil t)
+(set-frame-font "Fira Code-12" nil t)
+;;(set-frame-font "Source Code Pro-11" nil t)
+;;(set-frame-font "Lucida Grande" 12)
+;;(set-frame-font "Noto Sans" 12)
+
+;; Tell emacs where is your personal elisp lib dir
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+
+
+(setq initial-scratch-message "
+One thing I have learned in a long life: that all our science,
+measured against reality, is primitive and childlike—and yet it
+is the most precious thing we have.
+
+* HA devs control shortcuts
+# corre para evitar confirmacion de ejecucioens, luego, usar C-o en links
+(setq org-confirm-elisp-link-function nil)
+
+
+|---------+---------------+------------------+-----------------------------|
+| Shortuc | Dev           | Lugar            | Funcion                     |
+|---------+---------------+------------------+-----------------------------|
+| [[elisp:(ha-toggle-dev1)][C-c h e]] | Foco          | Estudio USERNAME    | ha-toggle-dev1    |
+| [[elisp:(ha-toggle-dev2)][C-c h c]] | Switch        | Cuarto principal | ha-toggle-dev2     |
+| [[elisp:(ha-toggle-dev3)][C-c h l]] | SwitchLampara | Estudio USERNAME    | ha-toggle-dev3 |
+| [[elisp:(ha-toggle-dev4)][C-c h v]] | SwitchVenti   | Estudio USERNAME    | ha-toggle-dev4   |
+|---------+---------------+------------------+-----------------------------|
+
+
+* According Aristotles a story needs: Pitty, fear, and catharsis
+* python input
+#+begin_src python :session
+import sys
+sys.executable
+#+end_src
+
+
+
+* AI input
+#+begin_ai
+Hi
+
+#+end_ai
+other wise AI via M-x gptel
+
+or C-c g p t -> to send to gptel-send from buffer
+
+C-c C-x t
+
+eglot server lsp:
+
+/home/USERNAME/Workspace/.conda/envs/environ/bin/pylsp
+
+* GOTOs:
+[[~/SERVERPATH/PATH/tempo.org][tempo.org]]
+[[~/SERVERPATH/PATH/notas_pollution.org][Pollution Project Notes]]
+[[recentf:][Abrir archivos recientes]]
+[[~/SERVERPATH/PATH/3dprints.org][3dprints]]
+[[~/SERVERPATH/PATH/homelabs.org][homelabs]]
+
+
+")
+
+;; --------------------
+;; This command makes appear in org mode the scratch file
+;; --------------------
+(setq initial-major-mode 'org-mode)
+;; --------------------
+
+
+
+
+
+
+
+
+
+
+
+;; Mejoras de UI/UX
+;; -------------
+;; Configuraciones adicionales de UI como tamaño de ventana, transparencia, etc.
+(setq global-nlinum-mode t)
+(global-visual-line-mode 1)
+(column-number-mode t)
+(load-theme 'tsdh-dark t)
+(hl-line-mode)
+(show-paren-mode 1)
+(global-hl-line-mode 1)
+
+;; (setq global-linum-mode t)
+
+(when (version<= "26.0.50" emacs-version )
+  (global-display-line-numbers-mode))
+
+
+;; --------------------
+;; This command is to the tabs in emacs
+;; --------------------
+;;; Centaru tabs..
+
+;; (use-package centaur-tabs
+;;   :demand
+;;   :config
+;;   (centaur-tabs-mode t)
+;;   :bind
+;;   ("C-<prior>" . centaur-tabs-backward)
+;;   ("C-<next>" . centaur-tabs-forward))
+
+(require 'centaur-tabs)
+(centaur-tabs-mode t)
+(global-set-key (kbd "C-<prior>")  'centaur-tabs-backward)
+(global-set-key (kbd "C-<next>") 'centaur-tabs-forward)
+
+
+;; emacs ivy mode:
+(ivy-mode 1)
+(setq ivy-use-virtual-buffers t)
+(setq ivy-count-format "(%d/%d) ")
+
+
+
+
+
+
+
+
+
+
+
+;; Keybindings Personalizados
+;; --------------------------
+;; Más atajos de teclado personalizados
+
+(global-set-key (kbd "C-x g") 'magit-status)
+;; Escape is the key to enter to edit mode
+(global-set-key (kbd "<escape>") 'god-local-mode)
+
+(global-set-key (kbd "<escape>") 'god-mode-all)
+
+
+(fset 'scrotch
+   [?\C-x ?b ?s ?c ?r ?a ?\C-a ?* ?\C-e ?t ?c ?h ?* backspace backspace backspace tab return ?\M-x ?o ?r ?g ?- ?m ?o ?d tab return])
+(global-set-key (kbd "C-x a") 'scrotch)
+
+
+(fset 'change-to-last-buffer
+   [?\C-x ?b return])
+(global-set-key (kbd "C-x w") 'change-to-last-buffer)
+
+(global-set-key "\C-xt" 'dired-toggle)
+(global-set-key "\C-xT" 'dired-toggle-quit)
+
+;; --------------------
+;; This command is to define an unfill region command
+;; --------------------
+(define-key global-map "\C-\M-Q" 'unfill-region)
+;; --------------------
+
+
+;;---------------------------
+;;   Macro para TODO's del día de hoy:
+;;---------------------------
+(fset 'todo_today
+   [?* ?  ?T ?O ?D ?O ?  ?W ?h ?a ?t ?  ?a ?r ?e ?  ?t ?h ?e ?  ?c ?h ?a ?l ?l ?e ?n ?g ?e ?s ?  ?f ?o ?r ?  ?t ?o ?d ?a ?y ?  ?\C-u ?\C-c ?! return ?? return ?* ?* ?  ?\C-c ?\C-t])
+
+(global-set-key (kbd "C-c C-x t") 'todo_today)
+
+
+
+
+
+
+
+
+
+
+
+
+;; Configuraciones de Org Mode
+;; ----------------------------
+;; Aquí puedes añadir toda tu configuración específica de org-mode, como plantillas, agenda, etc.
+
+(require 'org-tree-slide)
+(require 'org-journal)
+
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)))
+;;(setq org-babel-python-command "python3")
+
+
+;; --------------------
+;; This command is change the look of org mode
+;; --------------------
+
+;;; Org bullets:
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+;;;
+
+
+;; (use-package org-roam
+;;       :ensure t
+;;       :hook
+;;       (after-init . org-roam-mode)
+;;       :custom
+;;       (org-roam-directory "~/SERVERPATH/PATH/org-roam/")
+;;       :bind (:map org-roam-mode-map
+;;               (("C-c n l" . org-roam)
+;;                ("C-c n f" . org-roam-find-file)
+;;                ("C-c n g" . org-roam-graph))
+;;               :map org-mode-map
+;;               (("C-c n i" . org-roam-insert))
+;;               (("C-c n I" . org-roam-insert-immediate))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+    (eval-after-load 'org
+      (lambda()
+        (require 'ob-emacs-lisp)
+        (require 'ob-latex)
+        (require 'octave)
+        (require 'ob-python)
+        (require 'ob-sql)
+        (require 'ob-shell)
+        (require 'ob-sqlite)
+        (require 'ob-perl)
+        (require 'ob-org)
+        (require 'ob-awk)
+        (require 'ob-sed)
+        (require 'ob-css)
+        (setq org-export-babel-evaluate nil)
+        (setq org-startup-indented t)
+        ;; increase imenu depth to include third level headings
+        (setq org-imenu-depth 3)
+        ;; Set sensible mode for editing dot files
+        (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot))
+        ;; Update images from babel code blocks automatically
+        (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
+        (setq org-src-fontify-natively t)
+        (setq org-src-tab-acts-natively t)
+        (setq org-confirm-babel-evaluate nil)))
+
+
+
+;;------------------------------------------------------------------
+;;   Para salvar archivos de manera automática: (parece que salvaría
+;;   todos los buffers org
+;;   ---------------------------------------------------------------
+(advice-add #'org-archive-subtree-default :after #'org-save-all-org-buffers)
+;;   Parecer workear OK.
+;;------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+;; Configuraciones para Programación
+;; ----------------------------------
+;; Configuraciones específicas de lenguajes de programación, herramientas de desarrollo, etc.
+;;(elpy-enable)
+(recentf-mode 1)
+(setq py-autopep8-options '("--max-line-length=100"))
+
+(setenv "PATH" (concat "/home/USERNAME/mambaforge/bin:" (getenv "PATH")))
+(setq exec-path (append '("/home/USERNAME/mambaforge/bin") exec-path))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;; Mejoras y Funcionalidades Misceláneas
+;; -------------------------------------
+;; Cualquier otra configuración que no encaje en las secciones anteriores.
+
+(require 'god-mode)
+(setq god-exempt-major-modes nil)
+(setq god-exempt-predicates nil)
+;; Mark multiple:
+
+(require 'inline-string-rectangle)
+(global-set-key (kbd "C-x r t") 'inline-string-rectangle)
+
+(require 'mark-more-like-this)
+(global-set-key (kbd "C-<") 'mark-previous-like-this)
+(global-set-key (kbd "C->") 'mark-next-like-this)
+(global-set-key (kbd "C-M-m") 'mark-more-like-this) ; like the other two, but takes an argument (negative is previous)
+(global-set-key (kbd "C-*") 'mark-all-like-this)
+
+
+;; load the packaged named xyz.
+;;(load "xyz") ;; best not to include the ending “.el” or “.elc”
+
+  (require 'accelerate)
+  (accelerate previous-line 3)
+  (accelerate next-line 3)
+  (accelerate backward-char 3)
+  (accelerate forward-char 3)
+  (accelerate dired-previous-line 3)
+  (accelerate dired-next-line 3)
+  (accelerate speedbar-prev 3)
+  (accelerate speedbar-next 3)
+
+
+;; Adding some upgrades to emats...
+(display-time-mode 1)
+(fset 'yes-or-no-p 'y-or-n-p)
+;; Tramp neede:
+
+(setq tramp-auto-save-directory "~/.emacs.d/tramp-auto-save-directory")
+
+(setq tramp-copy-size-limit 1000000)  ; Ajusta el límite de tamaño de copia
+(setq tramp-inline-compress-start-size 1000000)  ; Ajusta el límite de tamaño de compresión
+
+
+;; Mejoras Edición
+
+(defun unfill-region (beg end)
+  "Unfill the region, joining text paragraphs into a single
+    logical line.  This is useful, e.g., for use with
+    `visual-line-mode'."
+  (interactive "*r")
+  (let ((fill-column (point-max)))
+    (fill-region beg end)))
+
+(defun tf-toggle-show-trailing-whitespace ()
+  "Toggle show-trailing-whitespace between t and nil"
+  (interactive)
+  (setq show-trailing-whitespace (not show-trailing-whitespace)))
+
+
+(put 'upcase-region 'disabled nil)
+
+;
+
+;; funciones para manejar home assistant devices
+
+(defvar ha-token "TOKEN_HA"
+  "Token de autenticación para las solicitudes de Home Assistant.")
+
+;;; dev1
+(defun ha-toggle-dev1 ()
+  "Envía un comando HTTP POST para alternar el estado del 'light.foco_PLACE_zigbee'."
+  (interactive)
+  (shell-command 
+   (concat "curl -X POST -H 'Authorization: Bearer " ha-token "'"
+           " -H 'Content-Type: application/json'"
+           " -d '{\"entity_id\": \"light.foco_PLACE_zigbee\"}'"
+           " http://IP-HA:8123/api/services/light/toggle")))
+
+;; ;; Asignar la combinación de teclas
+(global-set-key (kbd "C-c h e") 'ha-toggle-dev1)
+
+;; --------------------
+;;; switch POW20 Luz cuarto
+
+;;; dev2
+(defun ha-toggle-dev2 ()
+  "Envía un comando HTTP POST para alternar el estado del 'switch.dev2'."
+  (interactive)
+  (shell-command 
+   (concat "curl -X POST -H 'Authorization: Bearer " ha-token "'"
+           " -H 'Content-Type: application/json'"
+           " -d '{\"entity_id\": \"switch.dev2\"}'"
+           " http://IP-HA:8123/api/services/switch/toggle")))
+
+;; Asignar la combinación de teclas
+(global-set-key (kbd "C-c h c") 'ha-toggle-dev2)
+
+
+;; --------------------
+;;; switch Lampara Estudio
+
+;;; devx_PLACE
+(defun ha-toggle-dev3 ()
+  "Envía un comando HTTP POST para alternar el estado del 'switch.devx_PLACE'."
+  (interactive)
+  (shell-command 
+   (concat "curl -X POST -H 'Authorization: Bearer " ha-token "'"
+           " -H 'Content-Type: application/json'"
+           " -d '{\"entity_id\": \"switch.devx_PLACE\"}'"
+           " http://IP-HA:8123/api/services/switch/toggle")))
+
+;; Asignar la combinación de teclas
+(global-set-key (kbd "C-c h l") 'ha-toggle-dev3)
+
+;; --------------------
+;;; switch Venti Estudio
+
+;;; devy_PLACE
+(defun ha-toggle-dev4 ()
+  "Envía un comando HTTP POST para alternar el estado del 'switch.devy_PLACE'."
+  (interactive)
+  (shell-command 
+   (concat "curl -X POST -H 'Authorization: Bearer " ha-token "'"
+           " -H 'Content-Type: application/json'"
+           " -d '{\"entity_id\": \"switch.devy_PLACE\"}'"
+           " http://IP-HA:8123/api/services/switch/toggle")))
+
+;; Asignar la combinación de teclas
+(global-set-key (kbd "C-c h v") 'ha-toggle-dev4)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; data is stored in ~/.elfeed
+(setq elfeed-feeds
+      '(
+        ;; programming....
+	
+
+;;	("http://feeds.bbci.co.uk/news/world/rss.xml" world_bbc)
+        ;; programming languages
+
+        ;; cloud
+
+))
+
+(setq-default elfeed-search-filter "@2-days-ago +unread")
+(setq-default elfeed-search-title-max-width 100)
+(setq-default elfeed-search-title-min-width 100)
+
+
+
+;;------------------------------------------------------------------
+;;   Para Chatgpt en emacs?
+;;   
+;;   ---------------------------------------------------------------
+
+(use-package org-ai
+  :ensure t
+  :commands (org-ai-mode
+             org-ai-global-mode)
+  :init
+  (add-hook 'org-mode-hook #'org-ai-mode) ; enable org-ai in org-mode
+  (org-ai-global-mode) ; installs global keybindings on C-c M-a
+  :config
+  ;;(setq org-ai-default-chat-model "gpt-3.5-turbo") ; if you are on the gpt-4 beta:
+
+  (setq org-ai-default-chat-model "gpt-4o")) ; if you are on the gpt-4 beta:
+;;  (org-ai-install-yasnippets)) ; if you are using yasnippet and want `ai` snippets
+
+;;(setq org-ai-default-chat-model "gpt-4o-mini")
+  (setq org-ai-default-chat-model "gpt-4o") 
+; if you are on the gpt-4 beta:
+;; nice to have
+(setq history-length 25)
+(savehist-mode 1)
+(save-place-mode 1)
+;;--- link for recent files lins that trigger stuff:
+(org-link-set-parameters "recentf"
+                         :follow (lambda (path) (recentf-open-files))
+                         :export (lambda (path desc backend)
+                                   (cond ((eq backend 'html) (format "<a href='%s'>%s</a>" path desc))
+                                         ((eq backend 'latex) (format "\\href{%s}{%s}" path desc)))))
+
+
+(setq org-ai-openai-api-token "APIOPENAI")
+
+(setq gptel-default-mode 'org-mode)
+
+;;   Para Chatgpt - gptel en emacs?
+;;   
+;;   ---------------------------------------------------------------
+
+(use-package gptel
+  :ensure t
+  :config
+  (setq gptel-api-key "APIOPENAI")
+  (setq gptel-model "gpt-4o"))
+
+;; Asignar la combinación de teclas
+(global-set-key (kbd "C-c g p t") 'gptel-send)
+
+
+;; Personalizaciones de Custom
+;; ---------------------------
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
+ '(chess-images-default-size 60)
+ '(custom-enabled-themes '(tsdh-dark))
+ '(epg-gpg-program "/usr/bin/gpg")
+ '(inhibit-startup-screen t)
+ '(org-agenda-files
+   '("~/SERVERPATH/PATH/todevpaper.org" "~/SERVERPATH/PATH/tempo.org" "~/SERVERPATH/PATH/newagenda.org"))
+ '(org-babel-python-command "/Users/USERNAME/opt/anaconda3/bin/python")
+ '(org-fontify-done-headline nil)
+ '(package-selected-packages
+   '(gptel monkeytype eglot gcode-mode lsp-ivy lsp-mode ivy-hydra counsel ivy yapfify org-ai elpy magit zmq jupyter elfeed bongo use-package ox-gfm org-roam-server org-roam htmlize chess py-autopep8 sudoku dired-toggle dired-sidebar centaur-tabs speed-type org-bullets 2048-game auctex all-the-icons-ibuffer matlab-mode markdown-mode markdown-mode+ markdown-preview-eww mark-multiple multiple-cursors god-mode org-journal org-tree-slide nlinum-hl auto-complete yasnippet)))
+ ;; '(python-shell-interpreter "/Users/USERNAME/opt/anaconda3/bin/python"))
+
+
+
+(setq god-exempt-major-modes nil)
+(setq god-exempt-predicates nil)
+
+;; Asignar la función personalizada a la tecla "q" en el modo god-mode
+(with-eval-after-load 'god-mode
+
+(define-key god-local-mode-map (kbd "i") #'god-local-mode)
+(define-key god-local-mode-map (kbd "[") #'backward-paragraph)
+(define-key god-local-mode-map (kbd "]") #'forward-paragraph)
+(define-key god-local-mode-map (kbd ",") #'beginning-of-buffer)
+(define-key god-local-mode-map (kbd ".") #'end-of-buffer)
+(define-key god-local-mode-map (kbd "q") #'quit-window))
+
+(defun my-god-mode-update-mode-line ()
+  (cond
+   (god-local-mode
+    (set-face-attribute 'mode-line nil
+                        :foreground "#604000"
+                        :background "#fff29a")
+    (set-face-attribute 'mode-line-inactive nil
+                        :foreground "#3f3000"
+                        :background "#fff3da"))
+   (t
+    (set-face-attribute 'mode-line nil
+			:foreground "#0a0a0a"
+			:background "#d7d7d7")
+    (set-face-attribute 'mode-line-inactive nil
+			:foreground "#404148"
+			:background "#efefef"))))
+
+(add-hook 'post-command-hook 'my-god-mode-update-mode-line)
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+;;; Fin del archivo .emacs
